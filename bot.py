@@ -14,8 +14,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
-# O token do bot fornecido pelo usuário
-BOT_TOKEN = "8230622826:AAFnGY0YX01qXwTE_0L3LY06fltLAgZpIfI"
+# O token do bot será lido de uma variável de ambiente para segurança no deploy
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 DOWNLOAD_DIR = "downloads"
 
 # Garante que o diretório de downloads exista
@@ -130,6 +130,10 @@ async def music(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 def main() -> None:
     """Inicia o bot."""
+    if not BOT_TOKEN:
+        logger.error("BOT_TOKEN não encontrado. Defina a variável de ambiente.")
+        return
+        
     # Cria o Application e passa o token do bot.
     application = Application.builder().token(BOT_TOKEN).build()
 
